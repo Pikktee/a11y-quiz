@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import { getDb } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 import { quizResults } from "@/lib/schema";
 import { getBadge } from "@/lib/badges";
 import { t, type Locale } from "@/lib/i18n";
