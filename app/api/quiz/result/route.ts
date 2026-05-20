@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   if (!verifyApiKey(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: CORS_HEADERS });
   }
 
   let body: unknown;
@@ -45,16 +45,15 @@ export async function POST(request: Request) {
     result_id: resultId,
     result_url: `${baseUrl}/r/${resultId}`,
     created_at: new Date().toISOString(),
-  });
+  }, { headers: CORS_HEADERS });
 }
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
+};
+
 export async function OPTIONS() {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      "Access-Control-Allow-Origin": "https://chat.openai.com",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
-    },
-  });
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
 }
