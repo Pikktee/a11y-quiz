@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
-import { db } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { quizResults } from "@/lib/schema";
 import { quizSubmissionSchema } from "@/lib/validators";
 import { verifyApiKey } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   if (!verifyApiKey(request)) {
@@ -28,7 +30,7 @@ export async function POST(request: Request) {
   const resultId = nanoid(8);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
 
-  await db.insert(quizResults).values({
+  await getDb().insert(quizResults).values({
     resultId,
     name: parsed.data.name,
     language: parsed.data.language,

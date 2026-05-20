@@ -2,8 +2,16 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";
 
-const client = createClient({
-  url: process.env.DATABASE_URL ?? "file:quiz.db",
-});
+// Lazy singleton — wird erst beim ersten Datenbankzugriff geöffnet,
+// nicht beim Importieren des Moduls (wichtig für Next.js build phase).
+let _db: ReturnType<typeof drizzle> | null = null;
 
-export const db = drizzle(client, { schema });
+export function getDb() {
+  if (!_db) {
+    const client = createClient({
+      url: process.env.DATABASE_URL ?? "file:quiz.db",
+    });
+    _db = drizzle(client, { schema });
+  }
+  return _db;
+}

@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { db } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { quizResults } from "@/lib/schema";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
   _request: Request,
@@ -9,7 +11,7 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const rows = await db
+  const rows = await getDb()
     .select()
     .from(quizResults)
     .where(eq(quizResults.resultId, id))

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
-import { db } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { quizResults } from "@/lib/schema";
 import { getBadge } from "@/lib/badges";
 import { t, type Locale } from "@/lib/i18n";
@@ -16,7 +16,7 @@ type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const rows = await db.select().from(quizResults).where(eq(quizResults.resultId, id)).limit(1);
+  const rows = await getDb().select().from(quizResults).where(eq(quizResults.resultId, id)).limit(1);
 
   if (rows.length === 0) {
     return { title: "Ergebnis nicht gefunden — A11y Quiz", robots: { index: false } };
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ResultPage({ params }: Props) {
   const { id } = await params;
-  const rows = await db.select().from(quizResults).where(eq(quizResults.resultId, id)).limit(1);
+  const rows = await getDb().select().from(quizResults).where(eq(quizResults.resultId, id)).limit(1);
 
   if (rows.length === 0) notFound();
 
