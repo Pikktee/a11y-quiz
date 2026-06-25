@@ -65,6 +65,11 @@ export default async function ResultPage({ params }: Props) {
     fullMark: 100,
   }));
 
+  const weakCategories = categories
+    .filter((c) => c.score < 60)
+    .sort((a, b) => a.score - b.score)
+    .map((c) => c.subject);
+
   const headingAnswers = lang === "de" ? "Frage für Frage" : "Question by Question";
   const headingCategories = lang === "de" ? "Nach Kategorie" : "By Category";
   const headingShare = lang === "de" ? "Ergebnis teilen" : "Share your result";
@@ -74,10 +79,10 @@ export default async function ResultPage({ params }: Props) {
     <>
       <LangSync lang={lang} />
       <main id="main-content" className="mx-auto max-w-3xl px-4 py-10 space-y-8">
-        <ResultHeader result={result} />
+        <ResultHeader result={result} weakCategories={weakCategories} />
 
         <section aria-labelledby="chart-heading" className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-          <h2 id="chart-heading" className="sr-only">{labels.yourScore}</h2>
+          <h2 id="chart-heading" className="text-lg font-semibold mb-4">{labels.yourScore}</h2>
           <ScoreDonut
             score={result.score}
             total={result.total}
@@ -102,7 +107,7 @@ export default async function ResultPage({ params }: Props) {
           <ShareButtons score={result.score} total={result.total} url={resultUrl} lang={lang} />
           <a
             href="https://chat.openai.com"
-            className="inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="inline-block rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
           >
             {linkPlayAgain}
           </a>
