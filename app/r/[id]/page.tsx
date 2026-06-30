@@ -106,7 +106,9 @@ export default async function ResultPage({ params }: Props) {
           <h2 className="text-xl font-semibold">{headingShare}</h2>
           <ShareButtons score={result.score} total={result.total} url={resultUrl} lang={lang} />
           <a
-            href="https://chat.openai.com"
+            href={process.env.NEXT_PUBLIC_CUSTOM_GPT_URL ?? "https://chatgpt.com"}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
           >
             {linkPlayAgain}
